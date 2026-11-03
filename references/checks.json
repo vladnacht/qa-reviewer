@@ -1,0 +1,886 @@
+{
+  "depths": {
+    "quick": {
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "critical_only": true,
+      "baseline": [
+        "fn.action.works",
+        "fn.perm.access",
+        "ui.layout.overlap",
+        "ui.content.placeholder",
+        "ux.a11y.semantics",
+        "bug.net.clean",
+        "rsp.layout",
+        "rsp.parity.actions"
+      ]
+    },
+    "standard": {
+      "viewports": [
+        "desktop",
+        "tablet",
+        "mobile"
+      ],
+      "critical_only": false
+    },
+    "exhaustive": {
+      "viewports": [
+        "small",
+        "mobile",
+        "tablet",
+        "laptop",
+        "desktop",
+        "wide"
+      ],
+      "critical_only": false
+    }
+  },
+  "viewports": {
+    "small": {
+      "width": 320,
+      "height": 640,
+      "touch": true
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "touch": true
+    },
+    "tablet": {
+      "width": 768,
+      "height": 1024,
+      "touch": true
+    },
+    "laptop": {
+      "width": 1024,
+      "height": 768,
+      "touch": false
+    },
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "touch": false
+    },
+    "wide": {
+      "width": 1920,
+      "height": 1080,
+      "touch": false
+    }
+  },
+  "domains": {
+    "functional": {
+      "lead": "qa-lead-functional",
+      "title": "Fonctionnel"
+    },
+    "ui": {
+      "lead": "qa-lead-ui",
+      "title": "UI"
+    },
+    "ux": {
+      "lead": "qa-lead-ux",
+      "title": "UX"
+    },
+    "bugs": {
+      "lead": "qa-lead-bugs",
+      "title": "Bugs et robustesse"
+    },
+    "responsive": {
+      "lead": "qa-lead-responsive",
+      "title": "Responsive"
+    }
+  },
+  "specialists": {
+    "qa-fn-flows": {
+      "domain": "functional",
+      "code": "FLOW",
+      "title": "Parcours et actions"
+    },
+    "qa-fn-rules": {
+      "domain": "functional",
+      "code": "RULE",
+      "title": "Règles métier et validation"
+    },
+    "qa-fn-permissions": {
+      "domain": "functional",
+      "code": "PERM",
+      "title": "Rôles et accès"
+    },
+    "qa-fn-data": {
+      "domain": "functional",
+      "code": "DATA",
+      "title": "Cycle de vie des données"
+    },
+    "qa-ui-layout": {
+      "domain": "ui",
+      "code": "LAY",
+      "title": "Mise en page"
+    },
+    "qa-ui-design": {
+      "domain": "ui",
+      "code": "DSN",
+      "title": "Cohérence visuelle"
+    },
+    "qa-ui-states": {
+      "domain": "ui",
+      "code": "STA",
+      "title": "États d'interface"
+    },
+    "qa-ui-content": {
+      "domain": "ui",
+      "code": "TXT",
+      "title": "Contenus et formats"
+    },
+    "qa-ux-journey": {
+      "domain": "ux",
+      "code": "JRN",
+      "title": "Parcours et orientation"
+    },
+    "qa-ux-feedback": {
+      "domain": "ux",
+      "code": "FBK",
+      "title": "Retours et confirmations"
+    },
+    "qa-ux-copy": {
+      "domain": "ux",
+      "code": "COPY",
+      "title": "Rédaction de l'interface"
+    },
+    "qa-ux-a11y": {
+      "domain": "ux",
+      "code": "A11Y",
+      "title": "Accessibilité"
+    },
+    "qa-bug-inputs": {
+      "domain": "bugs",
+      "code": "INP",
+      "title": "Saisies limites"
+    },
+    "qa-bug-network": {
+      "domain": "bugs",
+      "code": "NET",
+      "title": "Réseau et erreurs"
+    },
+    "qa-bug-concurrency": {
+      "domain": "bugs",
+      "code": "CONC",
+      "title": "Concurrence et doubles envois"
+    },
+    "qa-bug-navigation": {
+      "domain": "bugs",
+      "code": "NAV",
+      "title": "Navigation et session"
+    },
+    "qa-rsp-breakpoints": {
+      "domain": "responsive",
+      "code": "BRK",
+      "title": "Points de rupture"
+    },
+    "qa-rsp-touch": {
+      "domain": "responsive",
+      "code": "TCH",
+      "title": "Tactile et clavier virtuel"
+    },
+    "qa-rsp-parity": {
+      "domain": "responsive",
+      "code": "PAR",
+      "title": "Parité desktop / mobile"
+    },
+    "qa-rsp-zoom": {
+      "domain": "responsive",
+      "code": "ZOOM",
+      "title": "Zoom, orientation et modales"
+    }
+  },
+  "checks": [
+    {
+      "id": "fn.flow.happy",
+      "specialist": "qa-fn-flows",
+      "applies": [
+        "flow"
+      ],
+      "per": [
+        "viewport"
+      ],
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "depth": "quick",
+      "title": "Le parcours va au bout ; le résultat est visible et persiste après rechargement."
+    },
+    {
+      "id": "fn.action.works",
+      "specialist": "qa-fn-flows",
+      "applies": [
+        "page",
+        "modal",
+        "form",
+        "layout"
+      ],
+      "when": [
+        "actions"
+      ],
+      "per": [
+        "action"
+      ],
+      "depth": "quick",
+      "title": "L'action fait ce que son libellé annonce (destination, effet) ; aucun bouton mort."
+    },
+    {
+      "id": "fn.flow.alternatives",
+      "specialist": "qa-fn-flows",
+      "applies": [
+        "flow"
+      ],
+      "depth": "standard",
+      "title": "Branches du parcours : annuler, revenir, modifier une étape, reprendre plus tard."
+    },
+    {
+      "id": "fn.integration",
+      "specialist": "qa-fn-flows",
+      "applies": [
+        "page",
+        "form",
+        "api",
+        "job"
+      ],
+      "when": [
+        "integrations"
+      ],
+      "depth": "standard",
+      "title": "L'effet tiers a bien lieu (email capté en local, paiement en mode test, fichier stocké)."
+    },
+    {
+      "id": "fn.rule.validation",
+      "specialist": "qa-fn-rules",
+      "applies": [
+        "form"
+      ],
+      "when": [
+        "inputs"
+      ],
+      "per": [
+        "input"
+      ],
+      "depth": "quick",
+      "title": "Contraintes cohérentes entre client, serveur et base (requis, longueur, format, enum, unicité)."
+    },
+    {
+      "id": "fn.rule.business",
+      "specialist": "qa-fn-rules",
+      "applies": [
+        "page",
+        "form",
+        "api"
+      ],
+      "when": [
+        "entities"
+      ],
+      "depth": "standard",
+      "title": "Règles métier et calculs justes (totaux, statuts, dates et fuseaux, arrondis, quotas)."
+    },
+    {
+      "id": "fn.rule.server-trust",
+      "specialist": "qa-fn-rules",
+      "applies": [
+        "api"
+      ],
+      "depth": "standard",
+      "title": "Le serveur revalide tout : un body forgé sans passer par le formulaire est refusé proprement."
+    },
+    {
+      "id": "fn.perm.access",
+      "specialist": "qa-fn-permissions",
+      "applies": [
+        "page",
+        "modal",
+        "api"
+      ],
+      "per": [
+        "role"
+      ],
+      "roles": "all",
+      "depth": "quick",
+      "title": "Chaque rôle, anonyme compris, obtient exactement l'accès prévu, y compris par URL directe ou appel API."
+    },
+    {
+      "id": "fn.perm.ownership",
+      "specialist": "qa-fn-permissions",
+      "applies": [
+        "page",
+        "api"
+      ],
+      "when": [
+        "entities",
+        "auth"
+      ],
+      "depth": "quick",
+      "title": "Un utilisateur B ne lit ni ne modifie les données de A, même en devinant les ids."
+    },
+    {
+      "id": "fn.perm.ui-gating",
+      "specialist": "qa-fn-permissions",
+      "applies": [
+        "page",
+        "modal"
+      ],
+      "when": [
+        "actions"
+      ],
+      "per": [
+        "role"
+      ],
+      "depth": "standard",
+      "title": "Les actions affichées correspondent aux droits réels du rôle (ni action interdite visible, ni action permise cachée)."
+    },
+    {
+      "id": "fn.data.crud",
+      "specialist": "qa-fn-data",
+      "applies": [
+        "page",
+        "form"
+      ],
+      "when": [
+        "entities"
+      ],
+      "depth": "quick",
+      "title": "Créer, lire, modifier, supprimer : persistant après rechargement, listes et compteurs à jour."
+    },
+    {
+      "id": "fn.data.consistency",
+      "specialist": "qa-fn-data",
+      "applies": [
+        "page"
+      ],
+      "when": [
+        "entities"
+      ],
+      "depth": "standard",
+      "title": "Une donnée modifiée est à jour partout où elle apparaît (autres pages, badges, totaux, cache)."
+    },
+    {
+      "id": "fn.data.listing",
+      "specialist": "qa-fn-data",
+      "applies": [
+        "page"
+      ],
+      "when": [
+        "entities"
+      ],
+      "depth": "standard",
+      "title": "Tri, filtre, recherche, pagination : résultats justes, bornes (dernière page, aucun résultat), état gardé dans l'URL."
+    },
+    {
+      "id": "ui.layout.grid",
+      "specialist": "qa-ui-layout",
+      "applies": [
+        "page",
+        "modal"
+      ],
+      "per": [
+        "viewport"
+      ],
+      "depth": "standard",
+      "title": "Alignements, espacements, grille et hiérarchie visuelle réguliers."
+    },
+    {
+      "id": "ui.layout.overlap",
+      "specialist": "qa-ui-layout",
+      "applies": [
+        "page",
+        "modal",
+        "layout"
+      ],
+      "per": [
+        "viewport"
+      ],
+      "depth": "quick",
+      "title": "Rien ne déborde, ne se chevauche ni n'est rogné ; superpositions et éléments fixes à leur place."
+    },
+    {
+      "id": "ui.design.tokens",
+      "specialist": "qa-ui-design",
+      "applies": [
+        "page"
+      ],
+      "depth": "standard",
+      "title": "Couleurs, typographies, rayons et ombres issus du design system ; aucune valeur isolée."
+    },
+    {
+      "id": "ui.design.components",
+      "specialist": "qa-ui-design",
+      "applies": [
+        "page",
+        "modal",
+        "form",
+        "layout"
+      ],
+      "depth": "quick",
+      "title": "Un même composant a le même rendu partout (boutons, champs, cartes, badges, icônes)."
+    },
+    {
+      "id": "ui.design.media",
+      "specialist": "qa-ui-design",
+      "applies": [
+        "page"
+      ],
+      "depth": "standard",
+      "title": "Images et icônes chargées, nettes, aux bonnes proportions ; favicon et titre d'onglet présents."
+    },
+    {
+      "id": "ui.state.render",
+      "specialist": "qa-ui-states",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "per": [
+        "state"
+      ],
+      "depth": "quick",
+      "title": "L'état existe et est conçu : vide avec appel à l'action, chargement, erreur, succès, désactivé, partiel."
+    },
+    {
+      "id": "ui.state.controls",
+      "specialist": "qa-ui-states",
+      "applies": [
+        "form"
+      ],
+      "depth": "standard",
+      "title": "États des contrôles : survol, focus, actif, désactivé, invalide, lecture seule."
+    },
+    {
+      "id": "ui.content.overflow",
+      "specialist": "qa-ui-content",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "depth": "standard",
+      "title": "Textes très longs, mots sans espace, grands nombres : troncature propre, texte complet accessible."
+    },
+    {
+      "id": "ui.content.placeholder",
+      "specialist": "qa-ui-content",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "depth": "quick",
+      "title": "Aucun lorem ipsum, TODO, clé de traduction, undefined, null, NaN, [object Object] ni date invalide affichés."
+    },
+    {
+      "id": "ui.content.format",
+      "specialist": "qa-ui-content",
+      "applies": [
+        "page"
+      ],
+      "when": [
+        "entities"
+      ],
+      "depth": "standard",
+      "title": "Nombres, devises, dates, pluriels, accents et langue formatés de façon cohérente."
+    },
+    {
+      "id": "ux.journey.efficiency",
+      "specialist": "qa-ux-journey",
+      "applies": [
+        "flow"
+      ],
+      "depth": "quick",
+      "title": "Pas d'impasse, d'étape inutile ni de ressaisie ; points d'abandon identifiés."
+    },
+    {
+      "id": "ux.journey.wayfinding",
+      "specialist": "qa-ux-journey",
+      "applies": [
+        "page",
+        "layout"
+      ],
+      "depth": "standard",
+      "title": "On sait où l'on est et comment revenir : titre, navigation active, fil d'Ariane, retour."
+    },
+    {
+      "id": "ux.journey.next-step",
+      "specialist": "qa-ux-journey",
+      "applies": [
+        "page",
+        "modal"
+      ],
+      "when": [
+        "actions"
+      ],
+      "depth": "standard",
+      "title": "L'action principale est évidente ; après chaque étape, la suite est claire."
+    },
+    {
+      "id": "ux.feedback.action",
+      "specialist": "qa-ux-feedback",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "when": [
+        "actions"
+      ],
+      "per": [
+        "action"
+      ],
+      "depth": "standard",
+      "title": "L'action donne un retour en moins d'une seconde (toast, changement visible, indicateur)."
+    },
+    {
+      "id": "ux.feedback.destructive",
+      "specialist": "qa-ux-feedback",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "when": [
+        "destructive"
+      ],
+      "depth": "quick",
+      "title": "Action destructive : confirmation explicite, annulation possible ou conséquence annoncée."
+    },
+    {
+      "id": "ux.feedback.form-errors",
+      "specialist": "qa-ux-feedback",
+      "applies": [
+        "form"
+      ],
+      "depth": "quick",
+      "title": "Erreurs près du champ, au bon moment ; saisie conservée ; focus sur le premier champ en erreur."
+    },
+    {
+      "id": "ux.copy.clarity",
+      "specialist": "qa-ux-copy",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "depth": "standard",
+      "title": "Libellés en verbes d'action, terminologie constante, ton cohérent, pas d'ambiguïté."
+    },
+    {
+      "id": "ux.copy.errors",
+      "specialist": "qa-ux-copy",
+      "applies": [
+        "form",
+        "api"
+      ],
+      "depth": "quick",
+      "title": "Messages d'erreur compréhensibles et actionnables ; jamais d'erreur technique brute."
+    },
+    {
+      "id": "ux.a11y.keyboard",
+      "specialist": "qa-ux-a11y",
+      "applies": [
+        "page",
+        "modal",
+        "form",
+        "layout"
+      ],
+      "depth": "quick",
+      "title": "Tout se fait au clavier : ordre de tabulation, focus visible, focus piégé en modale, Échap."
+    },
+    {
+      "id": "ux.a11y.semantics",
+      "specialist": "qa-ux-a11y",
+      "applies": [
+        "page",
+        "modal",
+        "form",
+        "layout"
+      ],
+      "depth": "quick",
+      "title": "axe-core sans violation serious ou critical : labels, alternatives, titres, landmarks, ARIA."
+    },
+    {
+      "id": "ux.a11y.contrast",
+      "specialist": "qa-ux-a11y",
+      "applies": [
+        "page",
+        "modal"
+      ],
+      "depth": "standard",
+      "title": "Contrastes AA ; aucune information portée par la couleur seule."
+    },
+    {
+      "id": "ux.a11y.announce",
+      "specialist": "qa-ux-a11y",
+      "applies": [
+        "page",
+        "form"
+      ],
+      "depth": "exhaustive",
+      "title": "Erreurs, toasts et chargements annoncés aux lecteurs d'écran (aria-live, role=alert)."
+    },
+    {
+      "id": "bug.input.limits",
+      "specialist": "qa-bug-inputs",
+      "applies": [
+        "form"
+      ],
+      "when": [
+        "inputs"
+      ],
+      "per": [
+        "input"
+      ],
+      "depth": "quick",
+      "title": "Vide, espaces, max et max+1, très long, unicode, emoji, RTL, caractères spéciaux, HTML et script."
+    },
+    {
+      "id": "bug.input.types",
+      "specialist": "qa-bug-inputs",
+      "applies": [
+        "form"
+      ],
+      "when": [
+        "inputs"
+      ],
+      "per": [
+        "input"
+      ],
+      "depth": "standard",
+      "title": "Nombres (négatif, zéro, décimal, énorme), dates (invalide, passée, future), fichiers (type, taille, nom)."
+    },
+    {
+      "id": "bug.input.url-params",
+      "specialist": "qa-bug-inputs",
+      "applies": [
+        "page"
+      ],
+      "depth": "standard",
+      "title": "Paramètres d'URL et ids invalides, absents ou inexistants : 404 ou message, jamais de crash."
+    },
+    {
+      "id": "bug.net.clean",
+      "specialist": "qa-bug-network",
+      "applies": [
+        "page",
+        "modal"
+      ],
+      "depth": "quick",
+      "title": "Usage normal sans erreur console, exception JS ni requête en échec."
+    },
+    {
+      "id": "bug.net.failures",
+      "specialist": "qa-bug-network",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "when": [
+        "api"
+      ],
+      "depth": "quick",
+      "title": "API en 500, délai dépassé, hors ligne : message, possibilité de réessayer, pas d'écran blanc."
+    },
+    {
+      "id": "bug.net.slow",
+      "specialist": "qa-bug-network",
+      "applies": [
+        "page",
+        "form"
+      ],
+      "depth": "standard",
+      "title": "Réseau lent : état de chargement, pas de double requête, pas de saut de mise en page."
+    },
+    {
+      "id": "bug.conc.double-submit",
+      "specialist": "qa-bug-concurrency",
+      "applies": [
+        "page",
+        "modal",
+        "form"
+      ],
+      "when": [
+        "actions"
+      ],
+      "depth": "quick",
+      "title": "Double clic et Entrée répétée : une seule écriture côté serveur."
+    },
+    {
+      "id": "bug.conc.multi-tab",
+      "specialist": "qa-bug-concurrency",
+      "applies": [
+        "page",
+        "form"
+      ],
+      "when": [
+        "entities"
+      ],
+      "depth": "standard",
+      "title": "Deux onglets ou deux sessions : modifications concurrentes, données périmées, conflit signalé."
+    },
+    {
+      "id": "bug.conc.race",
+      "specialist": "qa-bug-concurrency",
+      "applies": [
+        "page"
+      ],
+      "when": [
+        "actions"
+      ],
+      "depth": "exhaustive",
+      "title": "Clics et filtres enchaînés vite : réponses dans le désordre, état final juste."
+    },
+    {
+      "id": "bug.nav.history",
+      "specialist": "qa-bug-navigation",
+      "applies": [
+        "flow"
+      ],
+      "depth": "quick",
+      "title": "Retour, avance, rechargement au milieu du parcours : pas de perte, pas de double envoi."
+    },
+    {
+      "id": "bug.nav.deeplink",
+      "specialist": "qa-bug-navigation",
+      "applies": [
+        "page",
+        "modal"
+      ],
+      "depth": "standard",
+      "title": "Accès direct par URL et lien partagé : la page et son état s'ouvrent correctement."
+    },
+    {
+      "id": "bug.nav.session",
+      "specialist": "qa-bug-navigation",
+      "applies": [
+        "page"
+      ],
+      "when": [
+        "auth"
+      ],
+      "depth": "standard",
+      "title": "Session expirée ou déconnexion dans un autre onglet : redirection propre puis retour à la page demandée."
+    },
+    {
+      "id": "rsp.layout",
+      "specialist": "qa-rsp-breakpoints",
+      "applies": [
+        "page",
+        "modal",
+        "layout"
+      ],
+      "per": [
+        "viewport"
+      ],
+      "depth": "quick",
+      "title": "La mise en page s'adapte : lisible, sans défilement horizontal, images et tableaux adaptés."
+    },
+    {
+      "id": "rsp.fixed-elements",
+      "specialist": "qa-rsp-breakpoints",
+      "applies": [
+        "page"
+      ],
+      "per": [
+        "viewport"
+      ],
+      "viewports": "touch",
+      "depth": "standard",
+      "title": "En-têtes fixes, barres du bas, bannières, widgets : ne masquent ni contenu ni action."
+    },
+    {
+      "id": "rsp.touch.targets",
+      "specialist": "qa-rsp-touch",
+      "applies": [
+        "page",
+        "modal",
+        "form",
+        "layout"
+      ],
+      "depth": "quick",
+      "title": "Cibles tactiles d'au moins 44 px et espacées ; actions testées au vrai tap."
+    },
+    {
+      "id": "rsp.touch.hover-only",
+      "specialist": "qa-rsp-touch",
+      "applies": [
+        "page",
+        "modal",
+        "layout"
+      ],
+      "when": [
+        "actions"
+      ],
+      "depth": "quick",
+      "title": "Aucune action ni information accessible uniquement au survol."
+    },
+    {
+      "id": "rsp.touch.keyboard",
+      "specialist": "qa-rsp-touch",
+      "applies": [
+        "form"
+      ],
+      "when": [
+        "inputs"
+      ],
+      "depth": "standard",
+      "title": "Bon clavier virtuel (type, inputmode, autocomplete) ; le champ actif n'est jamais masqué."
+    },
+    {
+      "id": "rsp.parity.actions",
+      "specialist": "qa-rsp-parity",
+      "applies": [
+        "page",
+        "modal",
+        "layout"
+      ],
+      "when": [
+        "actions"
+      ],
+      "depth": "quick",
+      "title": "Chaque action desktop a un chemin mobile qui fonctionne au tap."
+    },
+    {
+      "id": "rsp.parity.content",
+      "specialist": "qa-rsp-parity",
+      "applies": [
+        "page"
+      ],
+      "depth": "standard",
+      "title": "Aucune information présente en desktop n'est absente en mobile."
+    },
+    {
+      "id": "rsp.zoom.reflow",
+      "specialist": "qa-rsp-zoom",
+      "applies": [
+        "page",
+        "modal"
+      ],
+      "depth": "standard",
+      "title": "Zoom 200 % (largeur 320 px CSS) : contenu lisible et utilisable sans défilement horizontal."
+    },
+    {
+      "id": "rsp.orientation",
+      "specialist": "qa-rsp-zoom",
+      "applies": [
+        "page"
+      ],
+      "depth": "exhaustive",
+      "title": "Paysage sur mobile et tablette : utilisable, rien de coupé."
+    },
+    {
+      "id": "rsp.modal.fit",
+      "specialist": "qa-rsp-zoom",
+      "applies": [
+        "modal"
+      ],
+      "depth": "quick",
+      "title": "Modales et tiroirs tiennent à l'écran, défilent et se ferment au doigt."
+    }
+  ]
+}

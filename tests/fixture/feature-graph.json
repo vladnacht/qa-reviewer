@@ -1,0 +1,44 @@
+{
+  "project": "fixture",
+  "base_url": "http://localhost:4319",
+  "stack": "Node http, HTML statique",
+  "roles": ["anon", "user"],
+  "nodes": [
+    { "id": "layout.header", "kind": "layout", "title": "En-tête", "url": "/", "roles": ["anon", "user"],
+      "actions": ["Accueil", "Tableau de bord", "Articles", "Paramètres", "Déconnexion"], "source": ["tests/fixture-app.mjs:21"] },
+    { "id": "home", "kind": "page", "title": "Accueil", "route": "/", "url": "/", "roles": ["anon", "user"],
+      "states": ["default"], "actions": [], "source": ["tests/fixture-app.mjs:28"] },
+    { "id": "login", "kind": "page", "title": "Connexion", "route": "/login", "url": "/login", "roles": ["anon"], "critical": true,
+      "states": ["default", "error"], "actions": [], "source": ["tests/fixture-app.mjs:29"] },
+    { "id": "login.form", "kind": "form", "title": "Formulaire de connexion", "route": "POST /login", "parent": "login", "roles": ["anon"], "critical": true,
+      "states": ["default", "error", "disabled"], "actions": ["Se connecter"],
+      "inputs": [
+        { "name": "email", "label": "Email", "type": "text", "required": true },
+        { "name": "password", "label": "Mot de passe", "type": "password", "required": true }
+      ],
+      "api": ["api.login"], "entities": ["Session"], "source": ["tests/fixture-app.mjs:30"] },
+    { "id": "api.login", "kind": "api", "title": "Ouvrir une session", "route": "POST /login", "roles": ["anon"], "critical": true,
+      "entities": ["Session"], "source": ["tests/fixture-app.mjs:31"] },
+    { "id": "dashboard", "kind": "page", "title": "Tableau de bord", "route": "/dashboard", "url": "/dashboard", "roles": ["user"], "critical": true,
+      "states": ["default", "loading", "error"], "actions": ["Supprimer"], "destructive": ["Supprimer"],
+      "api": ["api.items"], "entities": ["Item"], "source": ["tests/fixture-app.mjs:32"] },
+    { "id": "items", "kind": "page", "title": "Articles", "route": "/items", "url": "/items", "roles": ["user"],
+      "states": ["default", "empty"], "actions": ["Supprimer"], "destructive": ["Supprimer"],
+      "inputs": [{ "name": "q", "label": "Recherche", "type": "search" }],
+      "entities": ["Item"], "source": ["tests/fixture-app.mjs:35"] },
+    { "id": "settings", "kind": "page", "title": "Paramètres", "route": "/settings", "url": "/settings", "roles": ["user"],
+      "states": ["default", "success"], "actions": ["Enregistrer"], "source": ["tests/fixture-app.mjs:41"] },
+    { "id": "api.items", "kind": "api", "title": "Lister les articles", "route": "GET /api/items", "roles": ["user"],
+      "entities": ["Item"], "source": ["tests/fixture-app.mjs:45"] }
+  ],
+  "flows": [
+    { "id": "F01", "title": "Connexion", "critical": true, "roles": ["anon"], "steps": ["login", "dashboard"] },
+    { "id": "F02", "title": "Consulter les articles", "roles": ["user"], "steps": ["dashboard", "items"] }
+  ],
+  "edges": [
+    { "from": "home", "to": "login", "via": "lien direct" },
+    { "from": "login", "to": "dashboard", "via": "clic « Se connecter »" },
+    { "from": "dashboard", "to": "settings", "via": "menu « Paramètres »" }
+  ],
+  "out_of_scope": []
+}
