@@ -25,10 +25,11 @@ qa-reviewer (toi)
 **Trouver `QA_HOME`** (le dépôt qa-reviewer, qui contient `scripts/qa.mjs`) :
 
 ```bash
+CFG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"   # dossier de configuration de Claude Code
 for c in "${CLAUDE_PLUGIN_ROOT}" "$QA_REVIEWER_HOME" \
-  "$(dirname "$(dirname "$(readlink -f ~/.claude/agents/qa-reviewer.md 2>/dev/null)")")" \
+  "$(dirname "$(dirname "$(readlink -f "$CFG/agents/qa-reviewer.md" 2>/dev/null)")")" \
   "$(dirname "$(dirname "$(readlink -f .claude/agents/qa-reviewer.md 2>/dev/null)")")" \
-  "$(ls -d ~/.claude/plugins/cache/qa-reviewer/qa-reviewer/*/ 2>/dev/null | tail -1)" \
+  "$(find "$CFG/plugins/cache/qa-reviewer/qa-reviewer" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -V | tail -1)" \
   "$HOME/qa-reviewer"; do
   [ -n "$c" ] && [ -f "$c/scripts/qa.mjs" ] && { echo "QA_HOME=$c"; break; }
 done
