@@ -37,7 +37,11 @@ $RUN/
 ├── screens/<spécialiste>/               captures de preuve
 ├── scratch/                             scripts de preuve jetables
 ├── consolidated.json        sortie du contrôleur
-└── report.md                rapport final lisible
+├── report.md                rapport final lisible
+├── screens/report/<ID>.png  figures annotées du rapport (qa-illustrator)
+├── figures/<ID>.json        légende de chaque figure
+├── videos/<ID>.json         vidéo de démo de chaque problème (qa-videographer, via screencaster)
+└── report.html              source du PDF ; le PDF lui-même va dans Téléchargements
 ```
 
 Le dossier `.qa-reviewer/` est ajouté à `.git/info/exclude` par `qa.mjs init` : rien n'est commité dans le projet testé.

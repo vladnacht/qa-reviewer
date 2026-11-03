@@ -12,7 +12,7 @@ pw() { (cd "$RUN" && "$PWCLI" -s="$SESSION" "$@"); }   # PWCLI peut contenir des
 
 # Ouvrir avec un profil, puis vérifier le viewport réel
 pw open --config="$RUN/profiles/mobile.json" "$BASE_URL"
-pw eval "() => [document.documentElement.clientWidth, innerHeight, devicePixelRatio, navigator.maxTouchPoints].join('x')"
+pw eval "() => [document.documentElement.clientWidth, visualViewport.height, devicePixelRatio, navigator.maxTouchPoints].join('x')"
 
 # Se connecter avec un état sauvegardé par le cartographe
 pw state-load auth-user.json

@@ -36,7 +36,7 @@ Chaque problème gardé l'est parce que tu as vu la preuve toi-même. Tu ne modi
 
 ## Sorties
 
-1. `$RUN/consolidated.json`, au format § 4 du contrat, problèmes triés P0 → P3.
+1. `$RUN/consolidated.json`, au format § 4 du contrat, problèmes triés P0 → P3, avec `systemic` et `not_covered` (le rapport PDF les lit là).
 2. `$RUN/report.md` :
 
 ```markdown

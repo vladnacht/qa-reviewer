@@ -22,7 +22,7 @@ const check = (label, cond, detail = '') => {
   if (!cond) failures++;
 };
 const run = (args, opts = {}) => {
-  const r = spawnSync(process.execPath, args, { encoding: 'utf8', cwd: opts.cwd || HOME });
+  const r = spawnSync(process.execPath, args, { encoding: 'utf8', cwd: opts.cwd || HOME, env: { ...process.env, ...opts.env } });
   return { code: r.status, out: (r.stdout || '') + (r.stderr || '') };
 };
 const write = (f, s) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, typeof s === 'string' ? s : JSON.stringify(s, null, 2)); };
@@ -96,6 +96,27 @@ try {
     // --sweeps reads every viewport folder (the path has spaces); /items?empty=1 maps to the /items node
     const good = run([QA, 'graph-check', path.join(RUN, 'feature-graph.json'), '--project', HOME, '--sweeps', path.join(RUN, 'sweep')]);
     check('graph-check accepts the completed graph (--sweeps, query strings)', good.code === 0 && /graph OK/.test(good.out), good.out);
+
+    // 5b. mark.mjs frames defects on the live page before the report screenshot
+    write(path.join(TMP, 'mark-test.mjs'), `
+      import { execFileSync } from 'node:child_process';
+      import { launchChromium } from ${JSON.stringify(path.join(HOME, 'scripts', 'lib', 'browser.mjs'))};
+      const expr = execFileSync(process.execPath, [${JSON.stringify(path.join(HOME, 'scripts', 'mark.mjs'))},
+        '--box', 'table', 'Tableau qui déborde', '--text', 'Exporter CSV', 'absent ici', '--box', '.tiny', 'Bouton de 18 px'], { encoding: 'utf8' });
+      const { browser } = await launchChromium({ quiet: true });
+      const ctx = await browser.newContext({ storageState: ${JSON.stringify(path.join(RUN, 'auth-user.json'))} });
+      const page = await ctx.newPage();
+      await page.goto(${JSON.stringify(BASE + '/dashboard')});
+      const marks = await page.evaluate('(' + expr + ')()');
+      const drawn = await page.locator('[data-qa-mark] > div').count();
+      await page.screenshot({ path: ${JSON.stringify(path.join(TMP, 'marked.png'))} });
+      const cleared = await page.evaluate('(' + execFileSync(process.execPath, [${JSON.stringify(path.join(HOME, 'scripts', 'mark.mjs'))}, '--clear'], { encoding: 'utf8' }) + ')()');
+      console.log(JSON.stringify({ marks, drawn, cleared, left: await page.locator('[data-qa-mark]').count() }));
+      await browser.close();`);
+    const mk = run([path.join(TMP, 'mark-test.mjs')]);
+    let m = null; try { m = JSON.parse(mk.out.trim().split('\n').pop()); } catch {}
+    check('mark.mjs frames found targets, reports missing ones and clears its overlay',
+      m && m.marks === '1 ok · 2 NOT FOUND · 3 ok' && m.drawn === 4 && m.cleared === 'cleared' && m.left === 0 && fs.existsSync(path.join(TMP, 'marked.png')), mk.out);
   }
   const broken = { roles: ['anon'], nodes: [{ id: 'x', kind: 'page', title: 'X', route: '/x', url: '/x', roles: ['admin'], source: ['nope.ts:1'], critical: true }], flows: [], edges: [] };
   write(path.join(TMP, 'broken-graph.json'), broken);
@@ -185,6 +206,40 @@ check('teardown stops the listed services and their children, and moves .playwri
   && !fs.existsSync(path.join(project, '.playwright-cli')) && fs.existsSync(path.join(RUN, 'scratch', 'playwright-cli-outside-run', 'page.yml')), td.out);
 write(path.join(RUN, 'leads', 'ux.json'), '{"domain": "ux", "issues": [');
 check('status flags a lead file that is not valid JSON', /^ux\s+lead file is not valid JSON/m.test(run([QA, 'status', '--run', RUN, '--wave', '1']).out));
+
+// 12. PDF report: summary tables, annotated figure with its legend, video copied next to the PDF
+write(path.join(RUN, 'consolidated.json'), {
+  run_id: 'selftest',
+  issues: [
+    { id: 'QA-002', severity: 'P2', status: 'confirmed', title: 'API sans contrôle', domains: ['functional'], nodes: ['api.items'], viewports: [],
+      evidence: [{ kind: 'command', ref: 'curl -s /api/items', excerpt: '500' }], repro: ['curl /api/items'], expected: '200', actual: '500' },
+    { id: 'QA-001', severity: 'P1', status: 'confirmed', title: 'Tableau qui déborde en mobile', domains: ['ui', 'responsive'], nodes: ['dashboard'], viewports: ['mobile'],
+      evidence: [], repro: ['Ouvrir /dashboard'], expected: 'Pas de défilement horizontal', actual: 'Tableau de 1200 px' },
+  ],
+  systemic: [{ title: 'Aucun état de chargement', merged_from: ['QA-001'] }],
+  not_covered: [{ area: 'Paiement', reason: 'pas de clés de test', todo: 'fournir des clés de test' }],
+  rejected: [],
+});
+fs.mkdirSync(path.join(RUN, 'screens', 'report'), { recursive: true });
+if (fs.existsSync(path.join(TMP, 'marked.png'))) fs.copyFileSync(path.join(TMP, 'marked.png'), path.join(RUN, 'screens', 'report', 'QA-001.png'));
+write(path.join(RUN, 'figures', 'QA-001.json'), { issue: 'QA-001', path: 'screens/report/QA-001.png', viewport: 'mobile', caption: 'Le tableau déborde de l\'écran.', marks: [{ n: 1, label: 'Tableau qui déborde' }] });
+write(path.join(TMP, 'demo.mp4'), 'fake video');
+write(path.join(RUN, 'videos', 'QA-001.json'), { issue: 'QA-001', path: path.join(TMP, 'demo.mp4'), duration_sec: 12 });
+const downloads = path.join(TMP, 'Téléchargements');
+const rp = run([path.join(HOME, 'scripts', 'report.mjs'), '--run', RUN, '--depth', 'quick'], { env: { QA_REVIEWER_OUTPUT_DIR: downloads } });
+const pdfFile = path.join(downloads, 'qa-report-project-selftest.pdf');
+const html = fs.existsSync(path.join(RUN, 'report.html')) ? fs.readFileSync(path.join(RUN, 'report.html'), 'utf8') : '';
+check('report.mjs writes the PDF in the downloads folder, with summary tables, legend and video',
+  rp.code === 0 && fs.existsSync(pdfFile) && fs.readFileSync(pdfFile).subarray(0, 5).toString() === '%PDF-'
+  && /Synthèse par domaine/.test(html) && /Tous les problèmes/.test(html) && /Figure 1<\/b> · QA-001/.test(html) && /<li value="1">Tableau qui déborde/.test(html)
+  && html.indexOf('id="QA-001"') < html.indexOf('id="QA-002"') && /Non couvert/.test(html)
+  && fs.existsSync(path.join(downloads, 'qa-report-project-selftest-videos', 'QA-001-demo.mp4')), rp.out);
+const { downloadsDir } = await import(path.join(HOME, 'scripts', 'report.mjs'));
+const fakeHome = path.join(TMP, 'home-fr');
+fs.mkdirSync(path.join(fakeHome, 'Téléchargements'), { recursive: true });
+check('the downloads folder follows QA_REVIEWER_OUTPUT_DIR, then Downloads or Téléchargements',
+  downloadsDir({ QA_REVIEWER_OUTPUT_DIR: '/x/y' }, fakeHome) === '/x/y'
+  && (process.platform === 'linux' || downloadsDir({}, fakeHome) === path.join(fakeHome, 'Téléchargements')));
 
 console.log(failures ? `\n${failures} check(s) failed` : '\nall checks passed');
 process.exit(failures ? 1 : 0);

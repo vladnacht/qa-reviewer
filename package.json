@@ -1,7 +1,7 @@
 {
   "name": "qa-reviewer",
-  "version": "0.1.1",
-  "description": "Agent de quality assurance multi-agents à trois couches : UI, UX, fonctionnel, bugs et responsive, avec une couverture prouvée.",
+  "version": "0.2.0",
+  "description": "Multi-agent QA for web apps: UI, UX, features, bugs and responsive, with proven coverage and a PDF report.",
   "type": "module",
   "private": true,
   "engines": {

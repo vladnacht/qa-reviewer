@@ -1,7 +1,7 @@
 {
   "name": "qa-reviewer",
-  "version": "0.1.1",
-  "description": "Recette QA complète d'une application web (UI, UX, fonctionnel, bugs, responsive) par 28 sous-agents sur trois couches, avec une couverture prouvée case par case et un rapport priorisé P0 → P3.",
+  "version": "0.2.0",
+  "description": "Full QA of a web app (UI, UX, features, bugs, responsive) by 30 subagents on three layers, with coverage proven cell by cell and a PDF report: summary tables, annotated screenshots and, with screencaster, demo videos.",
   "author": {
     "name": "Kamal NASSIROU",
     "email": "vladnacht@gmail.com"
@@ -9,5 +9,5 @@
   "homepage": "https://github.com/vladnacht/qa-reviewer",
   "repository": "https://github.com/vladnacht/qa-reviewer",
   "license": "MIT",
-  "keywords": ["qa", "testing", "ui", "ux", "accessibility", "responsive", "playwright", "subagents"]
+  "keywords": ["qa", "testing", "ui", "ux", "accessibility", "responsive", "playwright", "pdf-report", "subagents"]
 }
