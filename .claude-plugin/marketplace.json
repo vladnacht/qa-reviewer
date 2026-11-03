@@ -1,0 +1,13 @@
+{
+  "name": "qa-reviewer",
+  "owner": { "name": "Kamal NASSIROU", "email": "vladnacht@gmail.com" },
+  "metadata": { "description": "Marketplace du plugin qa-reviewer", "version": "0.1.0" },
+  "plugins": [
+    {
+      "name": "qa-reviewer",
+      "source": "./",
+      "description": "Recette QA complète d'une application web par sous-agents, avec couverture prouvée",
+      "version": "0.1.0"
+    }
+  ]
+}
