@@ -151,9 +151,29 @@ Vocabulaire de la couverture : une case **remplie** a un statut (`pass`, `fail`,
       "retest": "étapes ou commande qui échouent aujourd'hui et passeront une fois corrigé"
     }
   ],
+  "systemic": [{ "title": "Aucun état de chargement dans l'application", "merged_from": ["QA-004", "QA-011"] }],
+  "not_covered": [{ "area": "Bascule FR/EN", "reason": "le serveur de dev ne sert qu'une locale", "todo": "rejouer sur le build servi" }],
   "rejected": [{ "finding": "LAY-004", "reason": "…" }],
   "coverage": { "cells": 412, "pass": 301, "fail": 61, "na": 18, "blocked": 32, "empty": 0 }
 }
 ```
 
+`systemic` et `not_covered` reprennent les sections du même nom de `report.md` : le rapport PDF les lit ici.
+
 `status` : `confirmed` (le contrôleur l'a vu lui-même) ou `plausible` (cohérent, non reproduit, gardé seulement s'il est argumenté).
+
+## 5. Figures et vidéos du rapport PDF
+
+`$RUN/figures/<ID>.json`, écrit par qa-illustrator :
+
+```json
+{ "issue": "QA-009", "path": "screens/report/QA-009.png", "viewport": "desktop",
+  "caption": "Le hero de l'article affiche une image cassée et un bloc noir.",
+  "marks": [{ "n": 1, "label": "Image du hero cassée" }] }
+```
+
+ou `{ "issue": "QA-001", "none": "preuve par commande, rien à montrer à l'écran" }`. `path` est relatif à `$RUN` ; les numéros de `marks` sont ceux dessinés sur la capture par `scripts/mark.mjs`.
+
+`$RUN/videos/<ID>.json`, écrit par qa-videographer : `{ "issue", "path" (absolu, sortie de screencaster), "poster", "duration_sec", "verdict" }` ou `{ "issue", "none" }`.
+
+`scripts/report.mjs` assemble `consolidated.json`, `matrix/coverage.json`, les figures et les vidéos en un PDF. Sans figure annotée, il reprend la première capture des preuves, marquée « non annotée ».

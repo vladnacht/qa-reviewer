@@ -1,13 +1,19 @@
 {
   "name": "qa-reviewer",
-  "owner": { "name": "Kamal NASSIROU", "email": "vladnacht@gmail.com" },
-  "metadata": { "description": "Marketplace du plugin qa-reviewer", "version": "0.1.1" },
+  "owner": {
+    "name": "Kamal NASSIROU",
+    "email": "vladnacht@gmail.com"
+  },
+  "metadata": {
+    "description": "Marketplace for the qa-reviewer plugin",
+    "version": "0.2.0"
+  },
   "plugins": [
     {
       "name": "qa-reviewer",
       "source": "./",
-      "description": "Recette QA complète d'une application web par sous-agents, avec couverture prouvée",
-      "version": "0.1.1"
+      "description": "Full QA of a web app (UI, UX, features, bugs, responsive) by 30 subagents on three layers, with coverage proven cell by cell and a PDF report: summary tables, annotated screenshots and, with screencaster, demo videos.",
+      "version": "0.2.0"
     }
   ]
 }

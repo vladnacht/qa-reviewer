@@ -10,8 +10,6 @@ Une ligne par fichier : `catégorie<TAB>chemin`. Catégories qui **doivent** fin
 
 Le script ignore `node_modules`, `.git`, `.next`, `dist`, `build`, `coverage`, `.qa-reviewer` et les fichiers de plus de 1 Mo.
 
-Si `graphify-out/graph.json` existe et que la commande `graphify` est installée, `graphify query "routes, endpoints, formulaires et modales"` donne une vue d'ensemble plus rapide. C'est un complément : l'inventaire ci-dessus reste la référence de complétude.
-
 ## Stack
 
 ```bash
