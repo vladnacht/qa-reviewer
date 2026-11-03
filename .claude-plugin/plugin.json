@@ -1,6 +1,6 @@
 {
   "name": "qa-reviewer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Recette QA complète d'une application web (UI, UX, fonctionnel, bugs, responsive) par 28 sous-agents sur trois couches, avec une couverture prouvée case par case et un rapport priorisé P0 → P3.",
   "author": {
     "name": "Kamal NASSIROU",
